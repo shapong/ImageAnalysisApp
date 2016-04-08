@@ -1,1 +1,1 @@
-web: bin/ImageAnalysis
+web: bin/go-env
