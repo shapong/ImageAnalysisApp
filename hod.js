@@ -31,14 +31,14 @@ function callHOD(api_key) {
         type: "POST",
         success: function (data) {
             //$('.greeting-content').append(data)
-            //document.getElementById("log").innerText = JSON.stringify(data)
+            document.getElementById("result").innerText = JSON.stringify(data)
             alert(JSON.stringify(data));
-            ()
         }
-    // }).then(function(data) {
-    //    $('.greeting-id').append(data.id);
-    //    $('.greeting-content').append(data);
-    // })
-    });  
+    }).then(function(data) {
+        alert(JSON.stringify(data));
+       //$('.greeting-id').append(data.id);
+       //$('.greeting-content').append(data);
+    })
+    //});  
     
 }

@@ -6,6 +6,7 @@ import (
 	// "io/ioutil"
 	"net/http"
     "errors"
+    "fmt"
     "os"
 	// "regexp"
 )
@@ -58,30 +59,25 @@ func loadPage() (*HavenAPI, error) {
                                             //parseArray(val.([]interface{}))
                                        default:
                                             apiKey = concreteVal
-                                            //fmt.Fprintln(w, key, "hamsika:", concreteVal)
                                        }
                                     }
                                 
                                 
                             case []interface{}:
-                                //fmt.Fprintln(w,"hamsi", key)
-                                //parseArray(val.([]interface{}))
+
                             default:
                                 _ = concreteVal
-                                //fmt.Fprintln(w, key, ":", concreteVal)
                             }
                         }
 
                     default:
                         _ = concreteVal
-                        //fmt.Fprintln(w, "Index", i, ":", concreteVal)
 
                     }
                 }
                     
 
             default:
-                //fmt.Fprintln(w, k, "is of a type I don't know how to handle")
           }
        }
     }
@@ -115,7 +111,9 @@ func renderTemplate(w http.ResponseWriter, tmpl string, p *HavenAPI) {
 func main() {
 	// http.HandleFunc("/view/", makeHandler(viewHandler))
 	http.HandleFunc("/", editHandler)
+    addr := ":" + os.Getenv("PORT")
+    fmt.Printf("Listening on %v\n", addr)
 	// http.HandleFunc("/save/", makeHandler(saveHandler))
-
-	http.ListenAndServe(":8080", nil)
+    http.ListenAndServe(addr, nil)
+	//http.ListenAndServe(":8080", nil)
 }
