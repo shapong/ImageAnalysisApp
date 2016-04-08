@@ -19,7 +19,8 @@
     
 // });
 
-$(document).ready(function callHOD(api_key) {
+function callHOD(api_key) {
+    alert(api_key);
       $.ajax({
         // url: "https://api.havenondemand.com/1/api/sync/recognizeimages/v1&apikey=468f4fa3-530e-4898-8301-e98e32c43591"
         //url: "http://rest-service.guides.spring.io/greeting"
@@ -32,6 +33,7 @@ $(document).ready(function callHOD(api_key) {
             //$('.greeting-content').append(data)
             //document.getElementById("log").innerText = JSON.stringify(data)
             alert(JSON.stringify(data));
+            ()
         }
     // }).then(function(data) {
     //    $('.greeting-id').append(data.id);
@@ -39,4 +41,4 @@ $(document).ready(function callHOD(api_key) {
     // })
     });  
     
-});
+}

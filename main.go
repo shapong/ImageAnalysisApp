@@ -1,11 +1,8 @@
-// Copyright 2010 The Go Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
-
 package main
 
 import (
 	"html/template"
+    "encoding/json"
 	// "io/ioutil"
 	"net/http"
     "errors"
@@ -18,27 +15,90 @@ type HavenAPI struct {
 	Title string
 }
 
+var apiKey interface{}
 func loadPage() (*HavenAPI, error) {
-    apiKey := os.Getenv("VCAP_SERVICES")
-    if apiKey == "" {
+    
+    vs := os.Getenv("VCAP_SERVICES")
+    
+	var jsonblob = []byte(vs)
+	// var animals Blah
+    var f interface{}
+	err := json.Unmarshal(jsonblob, &f)
+    m := f.(map[string]interface{})
+
+	if err != nil {
+		//fmt.Fprintln(w, "error:", err)
+	} else {
+
+       for k, v := range m {
+        switch vv := v.(type) {
+            case []interface{}:
+                //parseArray(vv)
+                _ = k
+                
+                for i, val := range vv {
+                    _ = i
+                    switch concreteVal := val.(type) {
+                    case map[string]interface{}:
+                        //fmt.Fprintln(w, i)
+                        for key, val := range val.(map[string]interface{}) {
+                            _ = key
+                            switch concreteVal := val.(type) {
+                            case map[string]interface{}:
+                                //fmt.Fprintln(w, key)
+                                
+                                   for key, val := range val.(map[string]interface{}) {
+                                       _ = key
+                                       switch concreteVal := val.(type) {
+                                       case map[string]interface{}:
+                                            //fmt.Fprintln(w, key)
+                                            //parseMap(val.(map[string]interface{}))
+                                       case []interface{}:
+                                            //fmt.Fprintln(w, key)
+                                            //parseArray(val.([]interface{}))
+                                       default:
+                                            apiKey = concreteVal
+                                            //fmt.Fprintln(w, key, "hamsika:", concreteVal)
+                                       }
+                                    }
+                                
+                                
+                            case []interface{}:
+                                //fmt.Fprintln(w,"hamsi", key)
+                                //parseArray(val.([]interface{}))
+                            default:
+                                _ = concreteVal
+                                //fmt.Fprintln(w, key, ":", concreteVal)
+                            }
+                        }
+
+                    default:
+                        _ = concreteVal
+                        //fmt.Fprintln(w, "Index", i, ":", concreteVal)
+
+                    }
+                }
+                    
+
+            default:
+                //fmt.Fprintln(w, k, "is of a type I don't know how to handle")
+          }
+       }
+    }
+    
+    //apiKey := os.Getenv("VCAP_SERVICES")
+    apiStr, ok := apiKey.(string)
+    if !ok {
         return &HavenAPI{Title: ""}, errors.New("Missing API Key")
     }
-	return &HavenAPI{Title: apiKey}, nil
+    
+	return &HavenAPI{Title: apiStr}, nil
 }
-
-// func viewHandler(w http.ResponseWriter, r *http.Request, title string) {
-// 	p, err := loadPage(title)
-// 	if err != nil {
-// 		http.Redirect(w, r, "/edit/"+title, http.StatusFound)
-// 		return
-// 	}
-// 	renderTemplate(w, "view", p)
-// }
 
 func editHandler(w http.ResponseWriter, r *http.Request) {
 	p, err := loadPage()
 	if err != nil {
-		p = &HavenAPI{Title: "468f4fa3-530e-4898-8301-e98e32c43591"}
+		p = &HavenAPI{Title: ""}
 	}
 	renderTemplate(w, "edit", p)
 }
