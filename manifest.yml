@@ -1,5 +1,5 @@
 applications:
-- name: go-env
+- name: ImageAnalysisApp
   buildpack: https://github.com/cloudfoundry/go-buildpack#v1.3.1
   memory: 32M
   stackato:

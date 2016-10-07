@@ -1,6 +1,6 @@
-all:	bin/go-env
+all:	bin/ImageAnalysisApp
 	@echo "Launching at http://localhost:5050/"
 	foreman start -p 5050
 
-bin/go-env:
+bin/ImageAnalysisApp:
 	GOBIN=bin go install
